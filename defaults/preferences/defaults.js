@@ -5,3 +5,5 @@ pref("extensions.zotero.zoteroocr.overwritePDF", false);
 pref("extensions.zotero.zoteroocr.outputHocr", true);
 pref("extensions.zotero.zoteroocr.outputPNG", true);
 pref("extensions.zotero.zoteroocr.maximumPagesAsHtml", "5");
+pref("extensions.zotero.zoteroocr.outputDPI", "300");
+pref("extensions.zotero.zoteroocr.outputAsCopyAttachment", false);

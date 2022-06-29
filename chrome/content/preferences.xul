@@ -31,6 +31,8 @@
             <preference id="pref-zoteroocr-output-hocr" name="extensions.zotero.zoteroocr.outputHocr" type="bool"/>
             <preference id="pref-zoteroocr-max-html-pages" name="extensions.zotero.zoteroocr.maximumPagesAsHtml" type="string"/>
             <preference id="pref-zoteroocr-output-png" name="extensions.zotero.zoteroocr.outputPNG" type="bool"/>
+            <preference id="pref-zoteroocr-output-dpi" name="extensions.zotero.zoteroocr.outputDPI" type="int"/>
+            <preference id="pref-zoteroocr-output-as-copy-attachment" name="extensions.zotero.zoteroocr.outputAsCopyAttachment" type="bool"/>
         </preferences>
         <groupbox>
             <caption label="OCR parameters"/>
@@ -42,6 +44,10 @@
                 <label value="Choose a language/script you want to use for recognition (default is eng):"/>
                 <textbox id="pref-zoteroocr-language-value" preference="pref-zoteroocr-language" width="100"/>
             </hbox>
+            <hbox>
+                <label value="Output pdf dpi (default is 300):"/>
+                <textbox id="pref-zoteroocr-output-dpi-value" preference="pref-zoteroocr-output-dpi" width="100"/>
+            </hbox>
         </groupbox>
         <groupbox>
             <caption label="Output options"/>
@@ -52,9 +58,10 @@
             <!-- The next preference variable is actually a number, but we treat it as a string to avoid a special treatment with javascript here -->
             <hbox class="indented-pref">
               <label value="Maximum number of pages for which an individual HTML attachment is created:"/>
-              <textbox id="pref-zoteroocr-max-html-pages" preference="pref-zoteroocr-max-html-pages" width="20"/>
+              <textbox id="pref-zoteroocr-max-html-pages" preference="pref-zoteroocr-max-html-pages" width="40"/>
             </hbox>
             <checkbox preference="pref-zoteroocr-output-png" label="Save the intermediate PNGs as well in the folder"/>
+            <checkbox preference="pref-zoteroocr-output-as-copy-attachment" label="Import the resulting PDF as a copy instead of as a file link"/>
         </groupbox>
     </prefpane>
 

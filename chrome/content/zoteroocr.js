@@ -4,17 +4,17 @@
 Components.utils.import("resource://gre/modules/FileUtils.jsm");
 Components.utils.import("resource://gre/modules/osfile.jsm");
 
-Zotero.OCR = new function() {
+Zotero.OCR = new function () {
 
-	this.openPreferenceWindow = function(paneID, action) {
+	this.openPreferenceWindow = function (paneID, action) {
 		var io = {pane: paneID, action: action};
 		window.openDialog(
-				'chrome://zoteroocr/content/preferences.xul',
-				'zoteroocr-preferences-windowname',
-				'chrome,titlebar,toolbar,centerscreen' + Zotero.Prefs.get('browser.preferences.instantApply', true) ? 'dialog=no' : 'modal', io
+			'chrome://zoteroocr/content/preferences.xul',
+			'zoteroocr-preferences-windowname',
+			'chrome,titlebar,toolbar,centerscreen' + Zotero.Prefs.get('browser.preferences.instantApply', true) ? 'dialog=no' : 'modal', io
 		);
 	};
-	
+
 	// disable or enable the nested option to overwrite PDF
 	this.updatePDFOverwritePref = function () {
 		setTimeout(() => {
@@ -135,8 +135,10 @@ Zotero.OCR = new function() {
 				try {
 					Zotero.debug("Running " + pdfinfo + ' ' + pdf + ' ' + infofile);
 					yield Zotero.Utilities.Internal.exec(pdfinfo, [pdf, infofile]);
-					Zotero.debug("Running " + pdftoppm + ' -png -r 300 ' + pdf + ' ' + dir + '/page');
-					yield Zotero.Utilities.Internal.exec(pdftoppm, ['-png', '-r', 300, pdf, dir + '/page']);
+
+					let cmdargs = ['-png', '-r', Zotero.Prefs.get("zoteroocr.outputDPI"), pdf, dir + '/page'];
+					Zotero.debug("Running " + pdftoppm + cmdargs.join(" "));
+					yield Zotero.Utilities.Internal.exec(pdftoppm, cmdargs);
 				}
 				catch (e) {
 					Zotero.logError(e);
@@ -173,6 +175,10 @@ Zotero.OCR = new function() {
 				Zotero.logError(e);
 			}
 
+			Zotero.debug(ocrbase + '.pdf');
+			Zotero.debug(item.id);
+			Zotero.debug("hi?");
+
 			if (Zotero.Prefs.get("zoteroocr.outputNote")) {
 				let contents = yield Zotero.File.getContentsAsync(ocrbase + '.txt');
 				contents = contents.replace(/(?:\r\n|\r|\n)/g, '<br />');
@@ -181,8 +187,8 @@ Zotero.OCR = new function() {
 				newNote.parentID = item.id;
 				yield newNote.saveTx();
 			}
-			
-			
+
+
 			if (Zotero.Prefs.get("zoteroocr.outputHocr")) {
 				let contents = yield Zotero.File.getContentsAsync(ocrbase + '.hocr');
 				// replace the absolute paths of images with relative ones
@@ -202,24 +208,44 @@ Zotero.OCR = new function() {
 				for (let i = 1; i < upperLimit; i++) {
 					let pagename = 'page-' + i + '.html';
 					let htmlfile = Zotero.File.pathToFile(OS.Path.join(dir, pagename));
-					let pagecontent = preamble + "<div class='ocr_page'" + parts[i] +	'<script src="https://unpkg.com/hocrjs"></script>\n</body>\n</html>';
+					let pagecontent = preamble + "<div class='ocr_page'" + parts[i] + '<script src="https://unpkg.com/hocrjs"></script>\n</body>\n</html>';
 					Zotero.File.putContents(htmlfile, pagecontent);
-					yield Zotero.Attachments.linkFromFile({
-						file: OS.Path.join(dir, pagename),
-						contentType: "text/html",
-						parentItemID: item.id
-					});
+					if (Zotero.Prefs.get("zoteroocr.outputAsCopyAttachment")) {
+						// Zotero.debug(OS.Path.join(dir, pagename));
+						// Zotero.debug(item.id);
+						// Zotero.debug("hi2?");
+						yield Zotero.Attachments.importFromFile({
+							file: OS.Path.join(dir, pagename),
+							contentType: "text/html",
+							parentItemID: item.id
+						});
+					}
+					else {
+						yield Zotero.Attachments.linkFromFile({
+							file: OS.Path.join(dir, pagename),
+							contentType: "text/html",
+							parentItemID: item.id
+						});
+					}
 				}
 			}
 
 			// attach PDF if it is a new one
 			if (Zotero.Prefs.get("zoteroocr.outputPDF") && !(Zotero.Prefs.get("zoteroocr.overwritePDF"))) {
-				yield Zotero.Attachments.linkFromFile({
-					file: ocrbase + '.pdf',
-					parentItemID: item.id
-				});
+				if (Zotero.Prefs.get("zoteroocr.outputAsCopyAttachment")) {
+					yield Zotero.Attachments.importFromFile({
+						file: ocrbase + '.pdf',
+						parentItemID: item.id
+					});
+				}
+				else {
+					yield Zotero.Attachments.linkFromFile({
+						file: ocrbase + '.pdf',
+						parentItemID: item.id
+					});
+				}
 			}
-			
+
 			if (!Zotero.Prefs.get("zoteroocr.outputPNG") && imageListArray) {
 				// delete image list
 				yield Zotero.File.removeIfExists(imageList);
