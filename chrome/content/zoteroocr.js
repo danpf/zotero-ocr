@@ -157,7 +157,7 @@ Zotero.OCR = new function () {
 			let parameters = [dir + '/image-list.txt'];
 			parameters.push(ocrbase);
 			parameters.push('--psm');
-      parameters.push(Zotero.Prefs.get("zoteroocr.PSSMMode"));
+      parameters.push(Zotero.Prefs.get("zoteroocr.PSMMode"));
 			if (Zotero.Prefs.get("zoteroocr.language")) {
 				parameters.push('-l');
 				parameters.push(Zotero.Prefs.get("zoteroocr.language"));

@@ -50,7 +50,7 @@
                 <textbox id="pref-zoteroocr-output-dpi-value" preference="pref-zoteroocr-output-dpi" width="100"/>
             </hbox>
             <hbox>
-                <label value="Tesseract Page Segmentation mode (0 &lt;= x &lt;= 13)"/>
+                <label value="Tesseract Page Segmentation Mode - integer from 0 to 13 (inclusive)"/>
                 <textbox id="pref-zoteroocr-psm-mode-value" preference="pref-zoteroocr-psm-mode" width="70"/>
             </hbox>
         </groupbox>
