@@ -183,7 +183,7 @@ Zotero.OCR = new function () {
 				let newNote = new Zotero.Item('note');
 				newNote.setNote(contents);
 				newNote.parentID = item.id;
-        newNote.libraryID = item.libraryID;
+				newNote.libraryID = item.libraryID;
 				yield newNote.saveTx();
 			}
 
@@ -213,7 +213,7 @@ Zotero.OCR = new function () {
 							file: OS.Path.join(dir, pagename),
 							contentType: "text/html",
 							parentItemID: item.id,
-              libraryID: item.libraryID,
+							libraryID: item.libraryID,
 						});
 					}
 					else {
@@ -221,7 +221,7 @@ Zotero.OCR = new function () {
 							file: OS.Path.join(dir, pagename),
 							contentType: "text/html",
 							parentItemID: item.id,
-              libraryID: item.libraryID,
+							libraryID: item.libraryID,
 						});
 					}
 				}
@@ -240,7 +240,7 @@ Zotero.OCR = new function () {
 					yield Zotero.Attachments.linkFromFile({
 						file: ocrbase + '.pdf',
 						parentItemID: item.id,
-            libraryID: item.libraryID,
+						libraryID: item.libraryID,
 					});
 				}
 			}
