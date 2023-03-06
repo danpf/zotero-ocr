@@ -156,6 +156,8 @@ Zotero.OCR = new function () {
 
 			let parameters = [dir + '/image-list.txt'];
 			parameters.push(ocrbase);
+			parameters.push('--psm');
+      parameters.push(Zotero.Prefs.get("zoteroocr.PSSMMode"));
 			if (Zotero.Prefs.get("zoteroocr.language")) {
 				parameters.push('-l');
 				parameters.push(Zotero.Prefs.get("zoteroocr.language"));
@@ -175,10 +177,6 @@ Zotero.OCR = new function () {
 				Zotero.logError(e);
 			}
 
-			Zotero.debug(ocrbase + '.pdf');
-			Zotero.debug(item.id);
-			Zotero.debug("hi?");
-
 			if (Zotero.Prefs.get("zoteroocr.outputNote")) {
 				let contents = yield Zotero.File.getContentsAsync(ocrbase + '.txt');
 				contents = contents.replace(/(?:\r\n|\r|\n)/g, '<br />');
@@ -187,7 +185,6 @@ Zotero.OCR = new function () {
 				newNote.parentID = item.id;
 				yield newNote.saveTx();
 			}
-
 
 			if (Zotero.Prefs.get("zoteroocr.outputHocr")) {
 				let contents = yield Zotero.File.getContentsAsync(ocrbase + '.hocr');
@@ -211,9 +208,6 @@ Zotero.OCR = new function () {
 					let pagecontent = preamble + "<div class='ocr_page'" + parts[i] + '<script src="https://unpkg.com/hocrjs"></script>\n</body>\n</html>';
 					Zotero.File.putContents(htmlfile, pagecontent);
 					if (Zotero.Prefs.get("zoteroocr.outputAsCopyAttachment")) {
-						// Zotero.debug(OS.Path.join(dir, pagename));
-						// Zotero.debug(item.id);
-						// Zotero.debug("hi2?");
 						yield Zotero.Attachments.importFromFile({
 							file: OS.Path.join(dir, pagename),
 							contentType: "text/html",

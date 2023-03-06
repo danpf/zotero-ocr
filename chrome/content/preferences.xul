@@ -31,7 +31,8 @@
             <preference id="pref-zoteroocr-output-hocr" name="extensions.zotero.zoteroocr.outputHocr" type="bool"/>
             <preference id="pref-zoteroocr-max-html-pages" name="extensions.zotero.zoteroocr.maximumPagesAsHtml" type="string"/>
             <preference id="pref-zoteroocr-output-png" name="extensions.zotero.zoteroocr.outputPNG" type="bool"/>
-            <preference id="pref-zoteroocr-output-dpi" name="extensions.zotero.zoteroocr.outputDPI" type="int"/>
+            <preference id="pref-zoteroocr-output-dpi" name="extensions.zotero.zoteroocr.outputDPI" type="string"/>
+            <preference id="pref-zoteroocr-psm-mode" name="extensions.zotero.zoteroocr.outputPSMMode" type="string"/>
             <preference id="pref-zoteroocr-output-as-copy-attachment" name="extensions.zotero.zoteroocr.outputAsCopyAttachment" type="bool"/>
         </preferences>
         <groupbox>
@@ -62,6 +63,7 @@
             </hbox>
             <checkbox preference="pref-zoteroocr-output-png" label="Save the intermediate PNGs as well in the folder"/>
             <checkbox preference="pref-zoteroocr-output-as-copy-attachment" label="Import the resulting PDF as a copy instead of as a file link"/>
+            <checkbox preference="pref-zoteroocr-psm-mode" label="Tesseract Page Segmentation mode (0 <= x <= 13)"/>
         </groupbox>
     </prefpane>
 
